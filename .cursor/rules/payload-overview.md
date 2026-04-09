@@ -44,21 +44,21 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
-  admin: {
-    user: 'users',
-    importMap: {
-      baseDir: path.resolve(dirname),
+    admin: {
+        user: 'users',
+        importMap: {
+            baseDir: path.resolve(dirname),
+        },
     },
-  },
-  collections: [Users, Media],
-  editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET,
-  typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts'),
-  },
-  db: mongooseAdapter({
-    url: process.env.DATABASE_URL,
-  }),
+    collections: [Users, Media],
+    editor: lexicalEditor(),
+    secret: process.env.PAYLOAD_SECRET,
+    typescript: {
+        outputFile: path.resolve(dirname, 'payload-types.ts'),
+    },
+    db: mongooseAdapter({
+        url: process.env.DATABASE_URL,
+    }),
 })
 ```
 

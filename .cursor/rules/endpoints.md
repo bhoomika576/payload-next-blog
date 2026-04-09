@@ -15,21 +15,21 @@ import { APIError } from 'payload'
 import type { Endpoint } from 'payload'
 
 export const protectedEndpoint: Endpoint = {
-  path: '/protected',
-  method: 'get',
-  handler: async (req) => {
-    if (!req.user) {
-      throw new APIError('Unauthorized', 401)
-    }
+    path: '/protected',
+    method: 'get',
+    handler: async (req) => {
+        if (!req.user) {
+            throw new APIError('Unauthorized', 401)
+        }
 
-    // Use req.payload for database operations
-    const data = await req.payload.find({
-      collection: 'posts',
-      where: { author: { equals: req.user.id } },
-    })
+        // Use req.payload for database operations
+        const data = await req.payload.find({
+            collection: 'posts',
+            where: { author: { equals: req.user.id } },
+        })
 
-    return Response.json(data)
-  },
+        return Response.json(data)
+    },
 }
 ```
 
@@ -37,19 +37,19 @@ export const protectedEndpoint: Endpoint = {
 
 ```typescript
 export const trackingEndpoint: Endpoint = {
-  path: '/:id/tracking',
-  method: 'get',
-  handler: async (req) => {
-    const { id } = req.routeParams
+    path: '/:id/tracking',
+    method: 'get',
+    handler: async (req) => {
+        const { id } = req.routeParams
 
-    const tracking = await getTrackingInfo(id)
+        const tracking = await getTrackingInfo(id)
 
-    if (!tracking) {
-      return Response.json({ error: 'not found' }, { status: 404 })
-    }
+        if (!tracking) {
+            return Response.json({ error: 'not found' }, { status: 404 })
+        }
 
-    return Response.json(tracking)
-  },
+        return Response.json(tracking)
+    },
 }
 ```
 
@@ -58,40 +58,40 @@ export const trackingEndpoint: Endpoint = {
 ```typescript
 // Manual JSON parsing
 export const createEndpoint: Endpoint = {
-  path: '/create',
-  method: 'post',
-  handler: async (req) => {
-    const data = await req.json()
+    path: '/create',
+    method: 'post',
+    handler: async (req) => {
+        const data = await req.json()
 
-    const result = await req.payload.create({
-      collection: 'posts',
-      data,
-    })
+        const result = await req.payload.create({
+            collection: 'posts',
+            data,
+        })
 
-    return Response.json(result)
-  },
+        return Response.json(result)
+    },
 }
 
 // Using helper (handles JSON + files)
 import { addDataAndFileToRequest } from 'payload'
 
 export const uploadEndpoint: Endpoint = {
-  path: '/upload',
-  method: 'post',
-  handler: async (req) => {
-    await addDataAndFileToRequest(req)
+    path: '/upload',
+    method: 'post',
+    handler: async (req) => {
+        await addDataAndFileToRequest(req)
 
-    // req.data contains parsed body
-    // req.file contains uploaded file (if multipart)
+        // req.data contains parsed body
+        // req.file contains uploaded file (if multipart)
 
-    const result = await req.payload.create({
-      collection: 'media',
-      data: req.data,
-      file: req.file,
-    })
+        const result = await req.payload.create({
+            collection: 'media',
+            data: req.data,
+            file: req.file,
+        })
 
-    return Response.json(result)
-  },
+        return Response.json(result)
+    },
 }
 ```
 
@@ -99,25 +99,25 @@ export const uploadEndpoint: Endpoint = {
 
 ```typescript
 export const searchEndpoint: Endpoint = {
-  path: '/search',
-  method: 'get',
-  handler: async (req) => {
-    const url = new URL(req.url)
-    const query = url.searchParams.get('q')
-    const limit = parseInt(url.searchParams.get('limit') || '10')
+    path: '/search',
+    method: 'get',
+    handler: async (req) => {
+        const url = new URL(req.url)
+        const query = url.searchParams.get('q')
+        const limit = parseInt(url.searchParams.get('limit') || '10')
 
-    const results = await req.payload.find({
-      collection: 'posts',
-      where: {
-        title: {
-          contains: query,
-        },
-      },
-      limit,
-    })
+        const results = await req.payload.find({
+            collection: 'posts',
+            where: {
+                title: {
+                    contains: query,
+                },
+            },
+            limit,
+        })
 
-    return Response.json(results)
-  },
+        return Response.json(results)
+    },
 }
 ```
 
@@ -127,18 +127,18 @@ export const searchEndpoint: Endpoint = {
 import { headersWithCors } from 'payload'
 
 export const corsEndpoint: Endpoint = {
-  path: '/public-data',
-  method: 'get',
-  handler: async (req) => {
-    const data = await fetchPublicData()
+    path: '/public-data',
+    method: 'get',
+    handler: async (req) => {
+        const data = await fetchPublicData()
 
-    return Response.json(data, {
-      headers: headersWithCors({
-        headers: new Headers(),
-        req,
-      }),
-    })
-  },
+        return Response.json(data, {
+            headers: headersWithCors({
+                headers: new Headers(),
+                req,
+            }),
+        })
+    },
 }
 ```
 
@@ -148,17 +148,17 @@ export const corsEndpoint: Endpoint = {
 import { APIError } from 'payload'
 
 export const validateEndpoint: Endpoint = {
-  path: '/validate',
-  method: 'post',
-  handler: async (req) => {
-    const data = await req.json()
+    path: '/validate',
+    method: 'post',
+    handler: async (req) => {
+        const data = await req.json()
 
-    if (!data.email) {
-      throw new APIError('Email is required', 400)
-    }
+        if (!data.email) {
+            throw new APIError('Email is required', 400)
+        }
 
-    return Response.json({ valid: true })
-  },
+        return Response.json({ valid: true })
+    },
 }
 ```
 
@@ -170,18 +170,18 @@ Mounted at `/api/{collection-slug}/{path}`.
 
 ```typescript
 export const Orders: CollectionConfig = {
-  slug: 'orders',
-  endpoints: [
-    {
-      path: '/:id/tracking',
-      method: 'get',
-      handler: async (req) => {
-        // Available at: /api/orders/:id/tracking
-        const orderId = req.routeParams.id
-        return Response.json({ orderId })
-      },
-    },
-  ],
+    slug: 'orders',
+    endpoints: [
+        {
+            path: '/:id/tracking',
+            method: 'get',
+            handler: async (req) => {
+                // Available at: /api/orders/:id/tracking
+                const orderId = req.routeParams.id
+                return Response.json({ orderId })
+            },
+        },
+    ],
 }
 ```
 
@@ -191,18 +191,18 @@ Mounted at `/api/globals/{global-slug}/{path}`.
 
 ```typescript
 export const Settings: GlobalConfig = {
-  slug: 'settings',
-  endpoints: [
-    {
-      path: '/clear-cache',
-      method: 'post',
-      handler: async (req) => {
-        // Available at: /api/globals/settings/clear-cache
-        await clearCache()
-        return Response.json({ message: 'Cache cleared' })
-      },
-    },
-  ],
+    slug: 'settings',
+    endpoints: [
+        {
+            path: '/clear-cache',
+            method: 'post',
+            handler: async (req) => {
+                // Available at: /api/globals/settings/clear-cache
+                await clearCache()
+                return Response.json({ message: 'Cache cleared' })
+            },
+        },
+    ],
 }
 ```
 
@@ -212,16 +212,16 @@ Mounted at `/api/{path}`.
 
 ```typescript
 export default buildConfig({
-  endpoints: [
-    {
-      path: '/hello',
-      method: 'get',
-      handler: () => {
-        // Available at: /api/hello
-        return Response.json({ message: 'Hello!' })
-      },
-    },
-  ],
+    endpoints: [
+        {
+            path: '/hello',
+            method: 'get',
+            handler: () => {
+                // Available at: /api/hello
+                return Response.json({ message: 'Hello!' })
+            },
+        },
+    ],
 })
 ```
 

@@ -14,9 +14,9 @@ tags: [payload, database, mongodb, postgres, sqlite, transactions]
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 
 export default buildConfig({
-  db: mongooseAdapter({
-    url: process.env.DATABASE_URL,
-  }),
+    db: mongooseAdapter({
+        url: process.env.DATABASE_URL,
+    }),
 })
 ```
 
@@ -26,13 +26,13 @@ export default buildConfig({
 import { postgresAdapter } from '@payloadcms/db-postgres'
 
 export default buildConfig({
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URL,
-    },
-    push: false, // Don't auto-push schema changes
-    migrationDir: './migrations',
-  }),
+    db: postgresAdapter({
+        pool: {
+            connectionString: process.env.DATABASE_URL,
+        },
+        push: false, // Don't auto-push schema changes
+        migrationDir: './migrations',
+    }),
 })
 ```
 
@@ -42,12 +42,12 @@ export default buildConfig({
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 
 export default buildConfig({
-  db: sqliteAdapter({
-    client: {
-      url: 'file:./payload.db',
-    },
-    transactionOptions: {}, // Enable transactions (disabled by default)
-  }),
+    db: sqliteAdapter({
+        client: {
+            url: 'file:./payload.db',
+        },
+        transactionOptions: {}, // Enable transactions (disabled by default)
+    }),
 })
 ```
 
@@ -62,40 +62,40 @@ Payload automatically uses transactions for all-or-nothing database operations.
 ```typescript
 // ✅ CORRECT: Thread req through nested operations
 const resaveChildren: CollectionAfterChangeHook = async ({ collection, doc, req }) => {
-  // Find children - pass req
-  const children = await req.payload.find({
-    collection: 'children',
-    where: { parent: { equals: doc.id } },
-    req, // Maintains transaction context
-  })
-
-  // Update each child - pass req
-  for (const child of children.docs) {
-    await req.payload.update({
-      id: child.id,
-      collection: 'children',
-      data: { updatedField: 'value' },
-      req, // Same transaction as parent operation
+    // Find children - pass req
+    const children = await req.payload.find({
+        collection: 'children',
+        where: { parent: { equals: doc.id } },
+        req, // Maintains transaction context
     })
-  }
+
+    // Update each child - pass req
+    for (const child of children.docs) {
+        await req.payload.update({
+            id: child.id,
+            collection: 'children',
+            data: { updatedField: 'value' },
+            req, // Same transaction as parent operation
+        })
+    }
 }
 
 // ❌ WRONG: Missing req breaks transaction
 const brokenHook: CollectionAfterChangeHook = async ({ collection, doc, req }) => {
-  const children = await req.payload.find({
-    collection: 'children',
-    where: { parent: { equals: doc.id } },
-    // Missing req - separate transaction or no transaction
-  })
-
-  for (const child of children.docs) {
-    await req.payload.update({
-      id: child.id,
-      collection: 'children',
-      data: { updatedField: 'value' },
-      // Missing req - if parent operation fails, these updates persist
+    const children = await req.payload.find({
+        collection: 'children',
+        where: { parent: { equals: doc.id } },
+        // Missing req - separate transaction or no transaction
     })
-  }
+
+    for (const child of children.docs) {
+        await req.payload.update({
+            id: child.id,
+            collection: 'children',
+            data: { updatedField: 'value' },
+            // Missing req - if parent operation fails, these updates persist
+        })
+    }
 }
 ```
 
@@ -111,21 +111,21 @@ const brokenHook: CollectionAfterChangeHook = async ({ collection, doc, req }) =
 ```typescript
 const transactionID = await payload.db.beginTransaction()
 try {
-  await payload.create({
-    collection: 'orders',
-    data: orderData,
-    req: { transactionID },
-  })
-  await payload.update({
-    collection: 'inventory',
-    id: itemId,
-    data: { stock: newStock },
-    req: { transactionID },
-  })
-  await payload.db.commitTransaction(transactionID)
+    await payload.create({
+        collection: 'orders',
+        data: orderData,
+        req: { transactionID },
+    })
+    await payload.update({
+        collection: 'inventory',
+        id: itemId,
+        data: { stock: newStock },
+        req: { transactionID },
+    })
+    await payload.db.commitTransaction(transactionID)
 } catch (error) {
-  await payload.db.rollbackTransaction(transactionID)
-  throw error
+    await payload.db.rollbackTransaction(transactionID)
+    throw error
 }
 ```
 
@@ -146,21 +146,21 @@ Available storage adapters:
 import { s3Storage } from '@payloadcms/storage-s3'
 
 export default buildConfig({
-  plugins: [
-    s3Storage({
-      collections: {
-        media: true,
-      },
-      bucket: process.env.S3_BUCKET,
-      config: {
-        credentials: {
-          accessKeyId: process.env.S3_ACCESS_KEY_ID,
-          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-        },
-        region: process.env.S3_REGION,
-      },
-    }),
-  ],
+    plugins: [
+        s3Storage({
+            collections: {
+                media: true,
+            },
+            bucket: process.env.S3_BUCKET,
+            config: {
+                credentials: {
+                    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+                    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+                },
+                region: process.env.S3_REGION,
+            },
+        }),
+    ],
 })
 ```
 
@@ -172,18 +172,18 @@ export default buildConfig({
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
 export default buildConfig({
-  email: nodemailerAdapter({
-    defaultFromAddress: 'noreply@example.com',
-    defaultFromName: 'My App',
-    transportOptions: {
-      host: process.env.SMTP_HOST,
-      port: 587,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    },
-  }),
+    email: nodemailerAdapter({
+        defaultFromAddress: 'noreply@example.com',
+        defaultFromName: 'My App',
+        transportOptions: {
+            host: process.env.SMTP_HOST,
+            port: 587,
+            auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS,
+            },
+        },
+    }),
 })
 ```
 
@@ -193,11 +193,11 @@ export default buildConfig({
 import { resendAdapter } from '@payloadcms/email-resend'
 
 export default buildConfig({
-  email: resendAdapter({
-    defaultFromAddress: 'noreply@example.com',
-    defaultFromName: 'My App',
-    apiKey: process.env.RESEND_API_KEY,
-  }),
+    email: resendAdapter({
+        defaultFromAddress: 'noreply@example.com',
+        defaultFromName: 'My App',
+        apiKey: process.env.RESEND_API_KEY,
+    }),
 })
 ```
 

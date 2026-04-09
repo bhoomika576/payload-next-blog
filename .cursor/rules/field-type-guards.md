@@ -18,12 +18,12 @@ Type guards for runtime field type checking and safe type narrowing.
 import { fieldAffectsData } from 'payload'
 
 function generateSchema(fields: Field[]) {
-  fields.forEach((field) => {
-    if (fieldAffectsData(field)) {
-      // Safe to access field.name
-      schema[field.name] = getFieldType(field)
-    }
-  })
+    fields.forEach((field) => {
+        if (fieldAffectsData(field)) {
+            // Safe to access field.name
+            schema[field.name] = getFieldType(field)
+        }
+    })
 }
 
 // Filter data fields
@@ -38,12 +38,12 @@ Checks if field contains nested fields (group, array, row, or collapsible).
 import { fieldHasSubFields } from 'payload'
 
 function traverseFields(fields: Field[]): void {
-  fields.forEach((field) => {
-    if (fieldHasSubFields(field)) {
-      // Safe to access field.fields
-      traverseFields(field.fields)
-    }
-  })
+    fields.forEach((field) => {
+        if (fieldHasSubFields(field)) {
+            // Safe to access field.fields
+            traverseFields(field.fields)
+        }
+    })
 }
 ```
 
@@ -55,9 +55,9 @@ Checks if field type is `'array'`.
 import { fieldIsArrayType } from 'payload'
 
 if (fieldIsArrayType(field)) {
-  // field.type === 'array'
-  console.log(`Min rows: ${field.minRows}`)
-  console.log(`Max rows: ${field.maxRows}`)
+    // field.type === 'array'
+    console.log(`Min rows: ${field.minRows}`)
+    console.log(`Max rows: ${field.maxRows}`)
 }
 ```
 
@@ -71,10 +71,10 @@ Checks if field can have multiple values (select, relationship, or upload with `
 import { fieldSupportsMany } from 'payload'
 
 if (fieldSupportsMany(field)) {
-  // field.type is 'select' | 'relationship' | 'upload'
-  if (field.hasMany) {
-    console.log('Field accepts multiple values')
-  }
+    // field.type is 'select' | 'relationship' | 'upload'
+    if (field.hasMany) {
+        console.log('Field accepts multiple values')
+    }
 }
 ```
 
@@ -86,9 +86,9 @@ Checks if field is relationship/upload/join with numeric `maxDepth` property.
 import { fieldHasMaxDepth } from 'payload'
 
 if (fieldHasMaxDepth(field)) {
-  // field.type is 'upload' | 'relationship' | 'join'
-  // AND field.maxDepth is number
-  const remainingDepth = field.maxDepth - currentDepth
+    // field.type is 'upload' | 'relationship' | 'join'
+    // AND field.maxDepth is number
+    const remainingDepth = field.maxDepth - currentDepth
 }
 ```
 
@@ -100,10 +100,10 @@ Checks if field is virtual (computed or virtual relationship).
 import { fieldIsVirtual } from 'payload'
 
 if (fieldIsVirtual(field)) {
-  // field.virtual is truthy
-  if (typeof field.virtual === 'string') {
-    console.log(`Virtual path: ${field.virtual}`)
-  }
+    // field.virtual is truthy
+    if (typeof field.virtual === 'string') {
+        console.log(`Virtual path: ${field.virtual}`)
+    }
 }
 ```
 
@@ -115,10 +115,10 @@ if (fieldIsVirtual(field)) {
 import { fieldIsBlockType } from 'payload'
 
 if (fieldIsBlockType(field)) {
-  // field.type === 'blocks'
-  field.blocks.forEach((block) => {
-    console.log(`Block: ${block.slug}`)
-  })
+    // field.type === 'blocks'
+    field.blocks.forEach((block) => {
+        console.log(`Block: ${block.slug}`)
+    })
 }
 ```
 
@@ -128,8 +128,8 @@ if (fieldIsBlockType(field)) {
 import { fieldIsGroupType } from 'payload'
 
 if (fieldIsGroupType(field)) {
-  // field.type === 'group'
-  console.log(`Interface: ${field.interfaceName}`)
+    // field.type === 'group'
+    console.log(`Interface: ${field.interfaceName}`)
 }
 ```
 
@@ -139,9 +139,9 @@ if (fieldIsGroupType(field)) {
 import { fieldIsPresentationalOnly } from 'payload'
 
 if (fieldIsPresentationalOnly(field)) {
-  // field.type === 'ui'
-  // Skip in data operations, GraphQL schema, etc.
-  return
+    // field.type === 'ui'
+    // Skip in data operations, GraphQL schema, etc.
+    return
 }
 ```
 
@@ -153,15 +153,15 @@ if (fieldIsPresentationalOnly(field)) {
 import { fieldAffectsData, fieldHasSubFields } from 'payload'
 
 function traverseFields(fields: Field[], callback: (field: Field) => void) {
-  fields.forEach((field) => {
-    if (fieldAffectsData(field)) {
-      callback(field)
-    }
+    fields.forEach((field) => {
+        if (fieldAffectsData(field)) {
+            callback(field)
+        }
 
-    if (fieldHasSubFields(field)) {
-      traverseFields(field.fields, callback)
-    }
-  })
+        if (fieldHasSubFields(field)) {
+            traverseFields(field.fields, callback)
+        }
+    })
 }
 ```
 
@@ -171,8 +171,10 @@ function traverseFields(fields: Field[], callback: (field: Field) => void) {
 import { fieldAffectsData, fieldIsPresentationalOnly, fieldIsHiddenOrDisabled } from 'payload'
 
 const dataFields = fields.filter(
-  (field) =>
-    fieldAffectsData(field) && !fieldIsPresentationalOnly(field) && !fieldIsHiddenOrDisabled(field),
+    (field) =>
+        fieldAffectsData(field) &&
+        !fieldIsPresentationalOnly(field) &&
+        !fieldIsHiddenOrDisabled(field),
 )
 ```
 
@@ -182,11 +184,11 @@ const dataFields = fields.filter(
 import { fieldIsArrayType, fieldIsBlockType, fieldHasSubFields } from 'payload'
 
 if (fieldIsArrayType(field)) {
-  // Handle array-specific logic
+    // Handle array-specific logic
 } else if (fieldIsBlockType(field)) {
-  // Handle blocks-specific logic
+    // Handle blocks-specific logic
 } else if (fieldHasSubFields(field)) {
-  // Handle group/row/collapsible
+    // Handle group/row/collapsible
 }
 ```
 
@@ -197,11 +199,11 @@ import { fieldSupportsMany, fieldHasMaxDepth } from 'payload'
 
 // With guard - safe access
 if (fieldSupportsMany(field) && field.hasMany) {
-  console.log('Multiple values supported')
+    console.log('Multiple values supported')
 }
 
 if (fieldHasMaxDepth(field)) {
-  const depth = field.maxDepth // TypeScript knows this is number
+    const depth = field.maxDepth // TypeScript knows this is number
 }
 ```
 
