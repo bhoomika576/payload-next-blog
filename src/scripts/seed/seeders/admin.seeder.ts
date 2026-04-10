@@ -1,7 +1,7 @@
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { isDuplicateError } from '../lib/is-duplicate-error'
-import { env } from 'process'
+import { env } from '@/lib/env'
 
 export async function seedAdmin() {
     const payload = await getPayload({ config })
