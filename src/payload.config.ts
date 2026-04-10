@@ -7,6 +7,7 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { env } from './lib/env'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -16,6 +17,10 @@ export default buildConfig({
         user: Users.slug,
         importMap: {
             baseDir: path.resolve(dirname),
+        },
+        autoLogin: {
+            email: process.env.CMS_SEED_ADMIN_EMAIL || '',
+            password: process.env.CMS_SEED_ADMIN_PASSWORD || '',
         },
     },
     collections: [Users, Media],
