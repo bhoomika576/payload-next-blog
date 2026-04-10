@@ -28,4 +28,10 @@ const nextConfig: NextConfig = {
     },
 }
 
-export default withPayload(nextConfig, { devBundleServerPackages: false })
+const payloadConfig = withPayload(nextConfig, { devBundleServerPackages: false })
+
+if (payloadConfig.experimental) {
+    delete (payloadConfig.experimental as Record<string, unknown>).enableServerFastRefresh
+}
+
+export default payloadConfig
