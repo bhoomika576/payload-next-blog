@@ -1,3 +1,4 @@
+import withPlaiceholder from '@plaiceholder/next'
 import { withPayload } from '@payloadcms/next/withPayload'
 import type { NextConfig } from 'next'
 import path from 'path'
@@ -34,4 +35,4 @@ if (payloadConfig.experimental) {
     delete (payloadConfig.experimental as Record<string, unknown>).enableServerFastRefresh
 }
 
-export default payloadConfig
+export default withPlaiceholder(withPayload(nextConfig, { devBundleServerPackages: false }))
