@@ -1,7 +1,7 @@
 import { Payload } from 'payload'
 import { faker } from '@faker-js/faker'
-import { ARTICLE_AUTHOR_ROLE_OPTIONS } from '@/collections/ArticlesAuthors/constants'
-import { createMediaFromImageUrl } from '../lib/create-media-from image-url'
+import { ARTICLE_AUTHOR_ROLE_OPTIONS } from '@/collections/ArticleAuthors/constants'
+import { createMediaFromImageUrl } from '../lib/create-media-from-image-url'
 
 export async function seedArticleAuthor(payload: Payload) {
     try {
@@ -23,3 +23,4 @@ export async function seedArticleAuthor(payload: Payload) {
         console.warn('Failed to seed article author', error)
     }
 }
+

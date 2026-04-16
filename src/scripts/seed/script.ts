@@ -1,6 +1,6 @@
 import { getPayloadClient } from '@/lib/payload/client'
 import { seedAdmin } from './seeders/admin.seeder'
-import { seedArticleAuthor } from './seeders/article-author-seeder'
+import { seedArticleAuthor } from './seeders/article-author.seeder'
 import { seedArticles } from './seeders/articles.seeder'
 
 async function main() {
@@ -17,3 +17,4 @@ async function main() {
 }
 
 void main()
+

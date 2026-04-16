@@ -3,6 +3,8 @@ import { Payload } from 'payload'
 
 export async function createMediaFromImageUrl(payload: Payload, imageUrl: string) {
     try {
+        const imageUrl = faker.image.personPortrait({ size: 256 })
+
         const res = await fetch(imageUrl)
         const arrBuffer = await res.arrayBuffer()
         const buffer = Buffer.from(arrBuffer)
@@ -25,6 +27,6 @@ export async function createMediaFromImageUrl(payload: Payload, imageUrl: string
             },
         })
     } catch (error) {
-        console.warn('Failed to seed media file', error)
+        console.warn('failed to seed media file', error);
     }
 }
