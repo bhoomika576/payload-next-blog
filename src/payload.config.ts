@@ -44,7 +44,6 @@ export default buildConfig({
         pool: {
             connectionString: process.env.DATABASE_URL || '',
         },
-        prodMigrations: (await import('./migrations/index')).migrations,
     }),
     sharp,
 
