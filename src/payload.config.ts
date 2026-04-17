@@ -7,7 +7,7 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media/config'
-import { env } from 'process'
+import { env } from './lib/env'
 import { Articles } from './collections/Articles/config'
 import { ArticleAuthors } from './collections/ArticleAuthors/config'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
@@ -21,10 +21,16 @@ export default buildConfig({
         importMap: {
             baseDir: path.resolve(dirname),
         },
-        autoLogin: {
-            email: env.CMS_SEED_ADMIN_EMAIL,
-            password: env.CMS_SEED_ADMIN_PASSWORD,
-        },
+        ...(process.env.NODE_ENV !== 'production' &&
+            env.CMS_SEED_ADMIN_EMAIL &&
+            env.CMS_SEED_ADMIN_PASSWORD
+            ? {
+                  autoLogin: {
+                      email: env.CMS_SEED_ADMIN_EMAIL,
+                      password: env.CMS_SEED_ADMIN_PASSWORD,
+                  },
+              }
+            : {}),
     },
     collections: [Users, Media, Articles, ArticleAuthors],
     editor: lexicalEditor({
@@ -38,6 +44,7 @@ export default buildConfig({
         pool: {
             connectionString: process.env.DATABASE_URL || '',
         },
+        prodMigrations: (await import('./migrations/index.js')).migrations,
     }),
     sharp,
 

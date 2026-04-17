@@ -3,6 +3,11 @@ import { isDuplicateError } from '../lib/is-duplicate-error'
 import { env } from '@/lib/env'
 
 export async function seedAdmin(payload: Payload) {
+    if (!env.CMS_SEED_ADMIN_EMAIL || !env.CMS_SEED_ADMIN_PASSWORD) {
+        throw new Error(
+            'CMS_SEED_ADMIN_EMAIL and CMS_SEED_ADMIN_PASSWORD must be set to run seed',
+        )
+    }
     try {
         const response = await payload.create({
             collection: 'users',

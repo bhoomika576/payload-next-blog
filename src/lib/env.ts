@@ -3,8 +3,9 @@ import { z } from 'zod'
 
 export const env = createEnv({
   server: {
-    CMS_SEED_ADMIN_EMAIL: z.email(),
-    CMS_SEED_ADMIN_PASSWORD: z.string().min(1),
+    // Optional: only needed for local dev autoLogin
+    CMS_SEED_ADMIN_EMAIL: z.email().optional(),
+    CMS_SEED_ADMIN_PASSWORD: z.string().min(1).optional(),
   },
   client: {
     //

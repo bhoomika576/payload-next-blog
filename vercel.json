@@ -1,0 +1,13 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "functions": {
+    "src/app/(payload)/api/[...slug]/route.ts": {
+      "maxDuration": 60
+    },
+    "src/app/(frontend)/blog/[slug]/page.tsx": {
+      "maxDuration": 30
+    }
+  }
+}
