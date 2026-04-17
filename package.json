@@ -14,7 +14,7 @@
         "format": "prettier --write .",
         "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
         "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
-        "seed": "tsx -r dotenv/config src/scripts/seed/scripts.ts",
+        "seed": "tsx -r dotenv/config src/scripts/seed/script.ts",
         "nuke": "psql -U postgres -d payload_next_blog -c \"DROP SCHEMA public CASCADE; CREATE SCHEMA public;\" && npm run seed"
     },
     "dependencies": {
